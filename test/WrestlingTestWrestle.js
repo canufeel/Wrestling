@@ -10,7 +10,7 @@ contract ('Wrestling', function (accounts)
         Wrestling.deployed().then(inst => {
             WrestlingInstance = inst;
 
-            // Getting the addresses for players and assigning them to variables
+            // Getting the addresses for accounts we will use and assigning them to variables
             var account0 = web3.eth.accounts[0];
             var account1 = web3.eth.accounts[1];
 
