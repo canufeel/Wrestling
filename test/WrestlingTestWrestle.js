@@ -28,8 +28,8 @@ contract ('Wrestling', function (accounts)
             // wrestler2 bet: sends 10 ether
             WrestlingInstance.wrestle({from: account0, value: web3.toWei(10, "ether")});
 
-            WrestlingInstance.withdraw({from: theWinner}).then( (val) => {
-                assert(false, "should revert"); })
+            WrestlingInstance.withdraw({from: theWinner ???}).then( (val) => {
+               ?? assert(false, "should revert"); })
                 .catch( (err) => {
                     // in progress
                 })
