@@ -29,7 +29,12 @@ contract ('Wrestling', function (accounts)
             WrestlingInstance.wrestle({from: account1, value: web3.toWei(10, "ether")});
             
             // Making sure only the winner can withdraw ETH
-            WrestlingInstance.withdraw({from: account1});
+            WrestlingInstance.withdraw({from: account1}).then ( (val) => {
+                // The winner should be wrestler2 (account2)
+                assert(true, "Winner should be wrestler2");
+            }).catch( (err) => {
+                console.log('Error: ' + err);
             })
         })
-    });
+    })
+});
