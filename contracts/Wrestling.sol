@@ -76,12 +76,19 @@ contract Wrestling {
         emit EndOfGameEvent(winner, gains);
     }
 
-    function withdraw () public
+    function withdraw() public 
     {
         require(gameFinished && theWinner == msg.sender);
 
-        uint amount = gains;
-        gains = 0;
-        msg.sender.transfer(amount);
+        msg.sender.transfer(address(this).balance);
     }
+
+    // function withdraw () public
+    // {
+    //     require(gameFinished && theWinner == msg.sender);
+
+    //     uint amount = gains;
+    //     gains = 0;
+    //     msg.sender.transfer(amount);
+    // }
 }

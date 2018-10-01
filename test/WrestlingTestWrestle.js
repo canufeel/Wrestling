@@ -2,7 +2,7 @@ var Wrestling = artifacts.require("Wrestling");
 
 contract ('Wrestling', function (accounts)
 {
-    it("Simulating wrestling game (.wrestle()), only the winner can withdraw ether at the end", () => {
+    it("Simulating wrestling game ().wrestle())", () => {
         
 
         // Assigning a reference to the instance of the contract that truffle deployed
@@ -26,14 +26,10 @@ contract ('Wrestling', function (accounts)
             // Now, the wrestling! wrestler1 bet: sends 5 ether
             WrestlingInstance.wrestle({from: account0, value: web3.toWei(5, "ether")});
             // wrestler2 bet: sends 10 ether
-            WrestlingInstance.wrestle({from: account0, value: web3.toWei(10, "ether")});
-
-            WrestlingInstance.withdraw({from: theWinner}).then( (val) => {
-                assert(false, "should revert"); })
-                .catch( (err) => {
-                    // in progress
-                })
+            WrestlingInstance.wrestle({from: account1, value: web3.toWei(10, "ether")});
+            
+            // Making sure only the winner can withdraw ETH
+            WrestlingInstance.withdraw({from: account1});
             })
         })
-    })
-});
+    });
