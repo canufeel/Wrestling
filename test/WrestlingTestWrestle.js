@@ -10,7 +10,7 @@ contract ('Wrestling', function (accounts)
         Wrestling.deployed().then(inst => {
             WrestlingInstance = inst;
 
-            // Getting the addresses for players and assigning them to variables
+            // Getting the addresses for accounts we will use and assigning them to variables
             var account0 = web3.eth.accounts[0];
             var account1 = web3.eth.accounts[1];
 
@@ -26,6 +26,7 @@ contract ('Wrestling', function (accounts)
             // Now, the wrestling! wrestler1 bet: sends 5 ether
             WrestlingInstance.wrestle({from: account0, value: web3.toWei(5, "ether")});
             // wrestler2 bet: sends 10 ether
+<<<<<<< HEAD
             WrestlingInstance.wrestle({from: account1, value: web3.toWei(10, "ether")});
             
             // Making sure only the winner can withdraw ETH
@@ -33,3 +34,16 @@ contract ('Wrestling', function (accounts)
             })
         })
     });
+=======
+            WrestlingInstance.wrestle({from: account0, value: web3.toWei(10, "ether")});
+
+            WrestlingInstance.withdraw({from: theWinner ???}).then( (val) => {
+               ?? assert(false, "should revert"); })
+                .catch( (err) => {
+                    // in progress
+                })
+            })
+        })
+    })
+});
+>>>>>>> 180a5bb2cccaed6edc49aa8a97ca01282d861dd3
