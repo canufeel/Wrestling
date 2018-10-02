@@ -1,41 +1,60 @@
 var Wrestling = artifacts.require("Wrestling");
 
+const { revert: EVMrevert } = require('truffle-test-helpers');
+
+require('chai')
+  .use(require('chai-as-promised'))
+  .should();
+
 contract ('Wrestling', function (accounts)
 {
-    it("Simulating wrestling game ().wrestle())", () => {
-        
+    it("Simulating wrestling game ().wrestle())", async function() {
+      const account0 = accounts[0];
+      const account1 = accounts[1];
 
-        // Assigning a reference to the instance of the contract that truffle deployed
-        // to a variable WrestlingInstance
-        Wrestling.deployed().then(inst => {
-            WrestlingInstance = inst;
+      const WrestlingInstance = await Wrestling.new({ from: account0 });
 
-            // Getting the addresses for accounts we will use and assigning them to variables
-            var account0 = web3.eth.accounts[0];
-            var account1 = web3.eth.accounts[1];
+      await WrestlingInstance.registerAsAnOpponent({
+        from: account1
+      });
 
-            // It will return the address of the wrestler1, in our case it was the first account.
-            WrestlingInstance.wrestler1.call();
+      await WrestlingInstance.wrestle({
+        from: account0,
+        value: web3.toWei(5, "ether")
+      });
 
-            // Registering the second account as an opponent. It will fire "WrestlingStartsEvent"
-            WrestlingInstance.registerAsAnOpponent({from: account1});
+      await WrestlingInstance.wrestle({
+        from: account1,
+        value: web3.toWei(10, "ether")
+      });
 
-            // Retrieving the address of the second wrestler
-            WrestlingInstance.wrestler2.call();
+      await WrestlingInstance.withdraw({
+        from: account1
+      }).should.be.fulfilled;
+    });
 
-            // Now, the wrestling! wrestler1 bet: sends 5 ether
-            WrestlingInstance.wrestle({from: account0, value: web3.toWei(5, "ether")});
-            // wrestler2 bet: sends 10 ether
-            WrestlingInstance.wrestle({from: account1, value: web3.toWei(10, "ether")});
-            
-            // Making sure only the winner can withdraw ETH
-            var theWinner = account1;
-            WrestlingInstance.withdraw({from: theWinner}).then ( (val) => {
-                // The winner should be wrestler2 (account1)
-                assert(true, "Winner should be wrestler2");
-            }).catch( (err) => {
-                console.log('Error: ' + err);
-            })
-        })
-    })
+  it("Simulating wrestling game ().wrestle()) failure", async function() {
+    const account0 = accounts[0];
+    const account1 = accounts[1];
+
+    const WrestlingInstance = await Wrestling.new({ from: account0 });
+
+    await WrestlingInstance.registerAsAnOpponent({
+      from: account1
+    });
+
+    await WrestlingInstance.wrestle({
+      from: account0,
+      value: web3.toWei(5, "ether")
+    });
+
+    await WrestlingInstance.wrestle({
+      from: account1,
+      value: web3.toWei(10, "ether")
+    });
+
+    await WrestlingInstance.withdraw({
+      from: account0
+    }).should.be.rejectedWith(EVMrevert);
+  });
 });
